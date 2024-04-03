@@ -3,26 +3,30 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id       String    @id @default(cuid()) @map(name: "_id")
-  email    String    @unique
+  id       String  @id @default(cuid()) @map(name: "_id")
+  email    String  @unique
   name     String?
   password String
-  messages Message[]
+
+  SentMessages     Message[] @relation(name: "SentMessages")
+  ReceivedMessages Message[] @relation(name: "ReceivedMessages")
 }
 
 model Message {
-  id        String   @id @default(cuid()) @map(name: "_id")
-  authorId  String
-  message   String
-  edited    Boolean  @default(false)
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
-  deleted   Boolean  @default(false)
+  id         String   @id @default(cuid()) @map(name: "_id")
+  idSender   String
+  idReceiver String
+  message    String
+  edited     Boolean  @default(false)
+  updatedAt  DateTime @updatedAt
+  createdAt  DateTime @default(now())
+  deleted    Boolean  @default(false)
 
-  author User @relation(fields: [authorId], references: [id])
+  Sender   User @relation(name: "SentMessages", fields: [idSender], references: [id])
+  Receiver User @relation(name: "ReceivedMessages", fields: [idReceiver], references: [id])
 }
