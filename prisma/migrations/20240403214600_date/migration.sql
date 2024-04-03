@@ -3,7 +3,10 @@ CREATE TABLE "User" (
     "_id" TEXT NOT NULL PRIMARY KEY,
     "email" TEXT NOT NULL,
     "name" TEXT,
-    "password" TEXT NOT NULL
+    "password" TEXT NOT NULL,
+    "urlImage" TEXT,
+    "updatedAt" DATETIME NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CreateTable

@@ -1,10 +1,11 @@
 export interface IMessage {
-  image?: string
-  username: string
+  image?: string | null
+  username: string | null
   message: string
   date: Date
   deleted?: boolean
   edited?: boolean
+  status: MessageStatus
 }
 
 export enum MessageStatus {

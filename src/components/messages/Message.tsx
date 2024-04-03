@@ -4,11 +4,6 @@ import { IMessage, MessageStatus } from "@/types/index.d";
 import classNames from "classnames";
 import Image from "next/image";
 
-
-interface Props extends IMessage {
-  status: MessageStatus
-}
-
 export function Message({
   image,
   username,
@@ -17,7 +12,7 @@ export function Message({
   deleted,
   edited,
   status,
-}: Props) {
+}: IMessage) {
   const messageClassname = classNames('flex flex-col max-w-72 h-auto  px-3 gap-y-3 py-2 rounded-lg', {
     'bg-red-500': status === MessageStatus.RECEIVED,
     'bg-green-500': status === MessageStatus.SENT

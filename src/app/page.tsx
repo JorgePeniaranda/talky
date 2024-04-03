@@ -1,7 +1,14 @@
 import { Message } from "@/components/messages/Message";
-import { MessageStatus } from "@/types/index.d";
+import { IMessage } from "@/types/index.d";
+import axios from "axios";
 
-export default function Home() {
+const getMessages = async () => {
+  return await axios.get<IMessage[]>('http://localhost:3000/api/message');
+}
+
+export default async function Home() {
+  const messages = await getMessages();
+
   return (
     <main className="flex h-[90%] bg-zinc-800">
       {/* <aside>
@@ -9,17 +16,20 @@ export default function Home() {
       </aside> */}
       <div className="h-full m-auto">
         <section className="bg-zinc-700 min-w-[45rem] max-w-[56rem] h-5/6 overflow-y-auto px-4">
-          <Message message="HOLASDJOASJDSOAJ" date={new Date()} username="YOOO" status={MessageStatus.RECEIVED}/>
-          <Message message="HOLASDJOASJDSOAJ" date={new Date()} username="YOOO" status={MessageStatus.SENT}/>
-          <Message message="HOLASDJOASJDSOAJ" date={new Date()} username="YOOO" status={MessageStatus.RECEIVED}/>
-          <Message message="HOLASDJOASJDSOAJ" date={new Date()} username="YOOO" status={MessageStatus.RECEIVED}/>
-          <Message message="HOLASDJOASJDSOAJ" date={new Date()} username="YOOO" status={MessageStatus.RECEIVED}/>
-          <Message message="HOLASDJOASJDSOAJ" date={new Date()} username="YOOO" status={MessageStatus.SENT}/>
-          <Message message="HOLASDJOASJDSOAJ" date={new Date()} username="YOOO" status={MessageStatus.RECEIVED}/>
-          <Message message="HOLASDJOASJDSOAJ" date={new Date()} username="YOOO" status={MessageStatus.SENT}/>
-          <Message message="HOLASDJOASJDSOAJ" date={new Date()} username="YOOO" status={MessageStatus.RECEIVED}/>
-          <Message message="HOLASDJOASJDSOAJ" date={new Date()} username="YOOO" status={MessageStatus.SENT}/>
-          <Message message="HOLASDJOASJDSOAJ" date={new Date()} username="YOOO" status={MessageStatus.RECEIVED}/>
+          {
+            messages.data.map((message, index) => (
+              <Message
+                key={index}
+                image={message.image}
+                username={message.username}
+                message={message.message}
+                date={new Date(message.date)}
+                deleted={message.deleted}
+                edited={message.edited}
+                status={message.status}
+              />
+            ))
+          }
         </section>
         <form className="flex justify-center items-center h-1/6 gap-5">
           <input type="text" className="w-full px-4 py-3 rounded-md" placeholder="Escriba un mensaje..." />
