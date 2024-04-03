@@ -3,11 +3,11 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export default function Navbar() {
+export function Navbar() {
   const [logged, setLogged] = useState(false)
 
   return (
-    <nav className="flex justify-between items-center py-3 px-5 bg-slate-700">
+    <nav className="flex justify-between items-center py-3 px-5 bg-slate-700 h-[10%]">
       <a href="/" aria-label="home">
         <Image src="/img/logo.jpg" width={52} height={52} alt="Logo" />
       </a>
