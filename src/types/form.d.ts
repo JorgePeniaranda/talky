@@ -1,0 +1,3 @@
+interface ChatForm {
+  message: string;
+}

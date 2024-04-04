@@ -1,19 +1,18 @@
 "use client"
 
+import { createMessage, getMessages } from "@/api";
 import { MessagesStore } from "@/context/message";
 
-// export async function getAllMessages() {
-//   return await getMessages();
-// }
+export async function getAllMessages() {
+  return await getMessages();
+}
 
-export function sendMessage(formData: any) {
-  formData.preventDefault();
-
-  console.log('formData', formData)
+export function sendMessage(form: ChatForm, callback?: () => void): void {
+  const prevMessagesState = MessagesStore.getState().getMessages();
 
   MessagesStore.getState().addMessage({
     id: '1',
-    message: "W",
+    message: form.message,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     deleted: false,
@@ -22,8 +21,11 @@ export function sendMessage(formData: any) {
     }
   })
 
-  console.log(MessagesStore.getState().getMessages())
-  // return await createMessage(formData);
+  createMessage(form.message).then(() => {
+    if(typeof callback === 'function') callback();
+  }).catch((error) => {
+    MessagesStore.getState().setMessages(prevMessagesState);
+  })
 }
 
 
