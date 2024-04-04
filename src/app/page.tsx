@@ -3,7 +3,9 @@
 import { getMessages } from "@/api";
 import { Message } from "@/components/messages/Message";
 import { MessagesStore } from "@/context/message";
+import { ChatSchema } from "@/schemas/chat.schema";
 import { sendMessage } from "@/use-case/chat.usecase";
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from "react";
 import { useForm } from 'react-hook-form';
 
@@ -13,8 +15,10 @@ export default function Home() {
     handleSubmit,
     register,
     reset,
-    formState: { errors }
-  } = useForm<ChatForm>({})
+    formState: { errors, isValid, isDirty }
+  } = useForm<ChatForm>({
+    resolver: zodResolver(ChatSchema)
+  })
   const messages = MessagesStore(state => state.messages);
 
   useEffect(() => {
@@ -46,8 +50,8 @@ export default function Home() {
           }
         </section>
         <form onSubmit={handleSubmit((form) => sendMessage(form, reset))} className="flex justify-center items-center h-1/6 gap-5">
-          <input type="text" className="w-full px-4 py-3 rounded-md" placeholder="Escriba un mensaje..." {...register('message')}/>
-          <button type="submit" className="bg-zinc-700 text-white px-4 py-3 rounded-md">Enviar</button>
+          <input type="text" className="w-full px-4 py-3 rounded-md outline-none" placeholder="Escriba un mensaje..." {...register('message')}/>
+          <button type="submit" className="bg-zinc-700 text-white px-4 py-3 rounded-md disabled:bg-red-950" disabled={!isDirty || !isValid}>Enviar</button>
         </form>
       </div>
     </main>

@@ -21,9 +21,10 @@ export function sendMessage(form: ChatForm, callback?: () => void): void {
     }
   })
 
+
   createMessage(form.message).then(() => {
     if(typeof callback === 'function') callback();
-  }).catch((error) => {
+  }).catch(() => {
     MessagesStore.getState().setMessages(prevMessagesState);
   })
 }
