@@ -1,8 +1,8 @@
-import { prisma } from "@/lib/prisma";
-import { IMessage } from "@/types";
-import { NextRequest, NextResponse } from "next/server";
+import { prisma } from '@/lib/prisma'
+import { type IMessage } from '@/types'
+import { type NextRequest, NextResponse } from 'next/server'
 
-export async function GET(){
+export async function GET (): Promise<NextResponse> {
   const messages = await prisma.message.findMany({
     select: {
       id: true,
@@ -23,14 +23,14 @@ export async function GET(){
     }
   })
 
-  const messagesWithAuthor: IMessage[] = messages.map(message => {
+  const messagesWithAuthor: IMessage[] = messages.map((message) => {
     return {
       id: message.id,
       message: message.message,
       deleted: message.deleted,
       createdAt: message.createdAt,
       updatedAt: message.updatedAt,
-      author:{
+      author: {
         name: message.author.name,
         urlImage: message.author.account?.urlImage
       }
@@ -40,45 +40,45 @@ export async function GET(){
   return NextResponse.json(messagesWithAuthor)
 }
 
-export async function POST(request: NextRequest){
+export async function POST (request: NextRequest): Promise<NextResponse> {
   const { idAuthor, message } = await request.json()
 
   const newMessage = await prisma.message.create({
     data: {
-        idAuthor,
-        message
+      idAuthor,
+      message
     }
   })
 
-  return NextResponse.json(newMessage, {status: 201})
+  return NextResponse.json(newMessage, { status: 201 })
 }
 
-export async function PATCH(request: NextRequest){
+export async function PATCH (request: NextRequest): Promise<NextResponse> {
   const { id, message } = await request.json()
 
   const updatedMessage = await prisma.message.update({
-    where:{
+    where: {
       id
     },
     data: {
-        message
+      message
     }
   })
 
-  return NextResponse.json(updatedMessage, {status: 201})
+  return NextResponse.json(updatedMessage, { status: 201 })
 }
 
-export async function DELETE(request: NextRequest){
+export async function DELETE (request: NextRequest): Promise<NextResponse> {
   const { id } = await request.json()
 
   const newMessage = await prisma.message.update({
-    where:{
+    where: {
       id
     },
     data: {
-      deleted: true      
-    },
+      deleted: true
+    }
   })
 
-  return NextResponse.json(newMessage, {status: 201})
+  return NextResponse.json(newMessage, { status: 201 })
 }

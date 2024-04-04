@@ -1,3 +1,3 @@
 interface ChatForm {
-  message: string;
+  message: string
 }

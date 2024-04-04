@@ -1,4 +1,4 @@
-import { IMessage } from "."
+import { type IMessage } from '.'
 
 export interface IMessageStore {
   messages: IMessage[]

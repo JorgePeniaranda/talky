@@ -1,19 +1,17 @@
-import classNames from "classnames"
-import { DetailedHTMLProps, InputHTMLAttributes } from "react"
+import { type DetailedHTMLProps, type InputHTMLAttributes } from 'react'
 
-interface Props extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
-  error?: string
+interface Props
+  extends DetailedHTMLProps<
+  InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+  > {
+  errorMessage?: string
 }
 
-export function Input({
-  error,
-  ...InputProps
-}: Props){
-  const className = classNames(InputProps.className, {
-    'border-4 border-red-500': typeof error === 'string' 
-  })
-  
-  return (
-    <input {...InputProps}/>
-  )
+export function Input ({ errorMessage, ...InputProps }: Props): React.ReactNode {
+  // const className = classNames(InputProps.className, {
+  //   'border-4 border-red-500': typeof error === 'string'
+  // })
+
+  return <input {...InputProps} />
 }

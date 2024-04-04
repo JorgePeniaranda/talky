@@ -1,7 +1,7 @@
-import { prisma } from "@/lib/prisma"
-import { NextRequest, NextResponse } from "next/server"
+import { prisma } from '@/lib/prisma'
+import { type NextRequest, NextResponse } from 'next/server'
 
-export async function POST(request: NextRequest){
+export async function POST (request: NextRequest): Promise<NextResponse> {
   const { idAuthor, message } = await request.json()
 
   const messages = await prisma.message.create({
@@ -11,5 +11,5 @@ export async function POST(request: NextRequest){
     }
   })
 
-  return NextResponse.json({messages})
+  return NextResponse.json({ messages })
 }
