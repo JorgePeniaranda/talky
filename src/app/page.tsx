@@ -1,11 +1,14 @@
 "use client"
 
+import { getMessages } from "@/api";
 import { Message } from "@/components/messages/Message";
 import { MessagesStore } from "@/context/message";
 import { sendMessage } from "@/use-case/chat.usecase";
+import { useEffect, useState } from "react";
 import { useForm } from 'react-hook-form';
 
 export default function Home() {
+  const [loading, setLoading] = useState<boolean>(true)
   const {
     handleSubmit,
     register,
@@ -13,6 +16,16 @@ export default function Home() {
     formState: { errors }
   } = useForm<ChatForm>({})
   const messages = MessagesStore(state => state.messages);
+
+  useEffect(() => {
+    setLoading(true)
+    getMessages().then((messages) => {
+      MessagesStore.getState().setMessages(messages);
+    })
+    setLoading(false)
+  }, [])
+
+  if(loading) return <main className="flex h-[90%] bg-zinc-800 text-white justify-center items-center">Cargando...</main>
 
   return (
     <main className="flex h-[90%] bg-zinc-800">
