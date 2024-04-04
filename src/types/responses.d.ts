@@ -3,16 +3,11 @@ export interface Author {
   urlImage?: string | null;
 }
 
-export interface IMessage {
+export interface MessageResponse {
   id: string;
   message: string;
   deleted: boolean;
   updatedAt: Date | string;
   createdAt: Date | string;
   author: Author;
-}
-
-export enum MessageStatus {
-  RECEIVED = 0,
-  SENT = 1,
 }

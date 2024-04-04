@@ -8,28 +8,36 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(cuid()) @map(name: "_id")
-  email    String  @unique
-  name     String
-  password String
-  urlImage String?
-  updatedAt  DateTime @updatedAt
-  createdAt  DateTime @default(now())
+  id        String   @id @default(cuid()) @map(name: "_id")
+  name      String
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  guest     Boolean  @default(true)
 
-  SentMessages     Message[] @relation(name: "SentMessages")
-  ReceivedMessages Message[] @relation(name: "ReceivedMessages")
+  account Account?   @relation()
+  messages Message[] @relation()
+}
+
+model Account {
+  id        String   @id @default(cuid()) @map(name: "_id")
+  idUser    String   @unique
+  email     String   @unique
+  password  String
+  urlImage  String?
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [idUser], references: [id])
 }
 
 model Message {
-  id         String   @id @default(cuid()) @map(name: "_id")
-  idSender   String
-  idReceiver String
-  message    String
-  edited     Boolean  @default(false)
-  updatedAt  DateTime @updatedAt
-  createdAt  DateTime @default(now())
-  deleted    Boolean  @default(false)
+  id        String   @id @default(cuid()) @map(name: "_id")
+  idAuthor  String
+  message   String
+  edited    Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  deleted   Boolean  @default(false)
 
-  Sender   User @relation(name: "SentMessages", fields: [idSender], references: [id])
-  Receiver User @relation(name: "ReceivedMessages", fields: [idReceiver], references: [id])
+  author User @relation(fields: [idAuthor], references: [id])
 }

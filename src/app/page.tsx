@@ -1,38 +1,30 @@
+import { createMessage } from "@/api";
 import { Message } from "@/components/messages/Message";
-import { IMessage } from "@/types/index.d";
-import axios from "axios";
-
-const getMessages = async () => {
-  return await axios.get<IMessage[]>('http://localhost:3000/api/message');
-}
+import { getAllMessages } from "@/use-case/chat.usecase";
 
 export default async function Home() {
-  const messages = await getMessages();
+  const messages = await getAllMessages();
 
   return (
     <main className="flex h-[90%] bg-zinc-800">
-      {/* <aside>
-        <h2>Conversaciones</h2>
-      </aside> */}
       <div className="h-full m-auto">
         <section className="bg-zinc-700 min-w-[45rem] max-w-[56rem] h-5/6 overflow-y-auto px-4">
           {
-            messages.data.map((message, index) => (
+            messages.data.map((message) => (
               <Message
-                key={index}
-                image={message.image}
-                username={message.username}
+                key={message.id}
+                id={message.id}
                 message={message.message}
-                date={new Date(message.date)}
                 deleted={message.deleted}
-                edited={message.edited}
-                status={message.status}
+                updatedAt={message.updatedAt}
+                createdAt={message.createdAt}
+                author={message.author}
               />
             ))
           }
         </section>
-        <form className="flex justify-center items-center h-1/6 gap-5">
-          <input type="text" className="w-full px-4 py-3 rounded-md" placeholder="Escriba un mensaje..." />
+        <form action={createMessage} className="flex justify-center items-center h-1/6 gap-5">
+          <input type="text" name="message" className="w-full px-4 py-3 rounded-md" placeholder="Escriba un mensaje..." />
           <button className="bg-zinc-700 text-white px-4 py-3 rounded-md">Enviar</button>
         </form>
       </div>
