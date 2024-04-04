@@ -1,17 +1,15 @@
 'use client'
 
-import { getMessages } from '@/api'
 import { Message } from '@/components/messages/Message'
-import { MessagesStore } from '@/context/message'
+import { useFetchMessages } from '@/hooks/useFetchMessages'
 import { ChatSchema } from '@/schemas/chat.schema'
+import { type IMessage } from '@/types'
 import { sendMessage } from '@/use-case/chat.usecase'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 export default function Home (): React.ReactNode {
-  const [loading, setLoading] = useState<boolean>(true)
-  const messages = MessagesStore((state) => state.messages)
+  const { data, isLoading } = useFetchMessages()
   const {
     handleSubmit,
     register,
@@ -21,19 +19,7 @@ export default function Home (): React.ReactNode {
     resolver: zodResolver(ChatSchema)
   })
 
-  useEffect(() => {
-    setLoading(true)
-    getMessages()
-      .then((messages) => {
-        MessagesStore.getState().setMessages(messages)
-      })
-      .catch(() => {
-        MessagesStore.getState().setMessages([])
-      })
-    setLoading(false)
-  }, [])
-
-  if (loading) {
+  if (isLoading) {
     return (
       <main className="flex h-[90%] bg-zinc-800 text-white justify-center items-center">
         Cargando...
@@ -45,7 +31,7 @@ export default function Home (): React.ReactNode {
     <main className="flex h-[90%] bg-zinc-800">
       <div className="h-full m-auto">
         <section className="bg-zinc-700 min-w-[45rem] max-w-[56rem] h-5/6 overflow-y-auto px-4">
-          {messages.map((message, index) => (
+          {(data as IMessage[]).map((message, index) => (
             <Message
               key={index}
               id={message.id}

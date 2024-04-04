@@ -1,7 +1,6 @@
 'use client'
 
-import { createMessage, getMessages } from '@/api'
-import { MessagesStore } from '@/context/message'
+import { getMessages } from '@/api'
 import { type IMessage } from '@/types'
 
 export async function getAllMessages (): Promise<IMessage[]> {
@@ -9,26 +8,28 @@ export async function getAllMessages (): Promise<IMessage[]> {
 }
 
 export function sendMessage (form: ChatForm, callback?: () => void): void {
-  const prevMessagesState = MessagesStore.getState().getMessages()
+  console.log('enviando mensaje')
 
-  MessagesStore.getState().addMessage({
-    id: '1',
-    message: form.message,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    deleted: false,
-    author: {
-      name: 'User'
-    }
-  })
+  // const prevMessagesState = MessagesStore.getState().getMessages()
 
-  createMessage(form.message)
-    .then(() => {
-      if (typeof callback === 'function') callback()
-    })
-    .catch(() => {
-      MessagesStore.getState().setMessages(prevMessagesState)
-    })
+  // MessagesStore.getState().addMessage({
+  //   id: '1',
+  //   message: form.message,
+  //   createdAt: new Date().toISOString(),
+  //   updatedAt: new Date().toISOString(),
+  //   deleted: false,
+  //   author: {
+  //     name: 'User'
+  //   }
+  // })
+
+  // createMessage(form.message)
+  //   .then(() => {
+  //     if (typeof callback === 'function') callback()
+  //   })
+  //   .catch(() => {
+  //     MessagesStore.getState().setMessages(prevMessagesState)
+  //   })
 }
 
 // const messagesFormatted: IMessage[] = messages.map(message => {
