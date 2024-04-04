@@ -1,11 +1,29 @@
-import { createMessage, getMessages } from "@/api";
+"use client"
 
-export async function getAllMessages() {
-  return await getMessages();
-}
+import { MessagesStore } from "@/context/message";
 
-export async function sendMessage(formData: FormData) {
-  return await createMessage(formData);
+// export async function getAllMessages() {
+//   return await getMessages();
+// }
+
+export function sendMessage(formData: any) {
+  formData.preventDefault();
+
+  console.log('formData', formData)
+
+  MessagesStore.getState().addMessage({
+    id: '1',
+    message: "W",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    deleted: false,
+    author: {
+      name: 'User',
+    }
+  })
+
+  console.log(MessagesStore.getState().getMessages())
+  // return await createMessage(formData);
 }
 
 
